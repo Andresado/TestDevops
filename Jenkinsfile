@@ -4,13 +4,13 @@ pipeline {
  stages {
         stage('Checkout-git'){
                steps{
-		git poll: true, url: 'git@github.com:videocursoscloud/test-jenkins-1.git'
+		git poll: true, url: 'git@github.com:TestDevops/Jenkinsfile.git'
                }
         }
         stage('CreateVirtualEnv') {
             steps {
 				sh '''
-					bash -c "virtualenv entorno_virtual && source entorno_virtual/bin/activate"
+					bash -c "virtualenv entorno_devops && source entorno_devops/bin/activate"
 				'''
 
             }
@@ -18,21 +18,21 @@ pipeline {
         stage('InstallRequirements') {
             steps {
             	sh '''
-            		bash -c "source ${WORKSPACE}/entorno_virtual/bin/activate && ${WORKSPACE}/entorno_virtual/bin/python ${WORKSPACE}/entorno_virtual/bin/pip install -r requirements.txt"
+            		bash -c "source ${WORKSPACE}/entorno_devops/bin/activate && ${WORKSPACE}/entorno_devops/bin/python ${WORKSPACE}/entorno_devops/bin/pip install -r requirements.txt"
                 '''
             }
         }   
         stage('TestApp') {
             steps {
             	sh '''
-            		bash -c "source ${WORKSPACE}/entorno_virtual/bin/activate &&  cd src && ${WORKSPACE}/entorno_virtual/bin/python ${WORKSPACE}/entorno_virtual/bin/pytest && cd .."
+            		bash -c "source ${WORKSPACE}/entorno_devops/bin/activate &&  cd src && ${WORKSPACE}/entorno_devops/bin/python ${WORKSPACE}/entorno_devops/bin/pytest && cd .."
                 '''
             }
         }  
         stage('RunApp') {
             steps {
             	sh '''
-            		bash -c "source entorno_virtual/bin/activate ; ${WORKSPACE}/entorno_virtual/bin/python src/main.py &"
+            		bash -c "source entorno_devops/bin/activate ; ${WORKSPACE}/entorno_devops/bin/python src/main.py &"
                 '''
             }
         } 
